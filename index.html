@@ -9,8 +9,8 @@
         :root {
             --bg-color: #FAF9F6;
             --card-bg: #FFFFFF;
-            --primary-color: #4A5D23; /* زيتوني فاخر */
-            --accent-color: #D4AF37;  /* ذهبي */
+            --primary-color: #4A5D23;
+            --accent-color: #D4AF37;
             --text-color: #333333;
             --font-main: 'Amiri', serif;
             --font-title: 'Aref Ruqaa', serif;
@@ -23,6 +23,7 @@
             margin: 0;
             padding: 20px 10px;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
@@ -33,7 +34,7 @@
 
         .card {
             width: 100%;
-            max-width: 450px;
+            max-width: 480px;
             background: var(--card-bg);
             padding: 35px 20px;
             border-radius: 25px;
@@ -50,11 +51,7 @@
             margin: 10px 0 5px 0;
         }
 
-        .bismillah {
-            font-size: 1.2rem;
-            color: #666;
-            margin-bottom: 20px;
-        }
+        .bismillah { font-size: 1.2rem; color: #666; margin-bottom: 20px; }
 
         .names {
             font-family: var(--font-title);
@@ -62,10 +59,7 @@
             color: var(--primary-color);
             margin: 20px 0;
         }
-
-        .names span {
-            color: var(--accent-color);
-        }
+        .names span { color: var(--accent-color); }
 
         .event-info {
             background-color: #F4F6F0;
@@ -75,11 +69,7 @@
             border-right: 4px solid var(--primary-color);
             text-align: right;
         }
-
-        .event-info p {
-            margin: 8px 0;
-            font-size: 1.1rem;
-        }
+        .event-info p { margin: 8px 0; font-size: 1.1rem; }
 
         #countdown {
             display: flex;
@@ -90,7 +80,6 @@
             border-radius: 12px;
             border: 1px dashed var(--accent-color);
         }
-
         #countdown div { flex: 1; }
         #countdown span {
             display: block;
@@ -101,12 +90,7 @@
         #countdown label { font-size: 0.8rem; color: #666; }
 
         .rsvp-form { text-align: right; margin-top: 20px; }
-        .rsvp-form h3 {
-            text-align: center;
-            color: var(--primary-color);
-            font-family: var(--font-title);
-            font-size: 1.8rem;
-        }
+        .rsvp-form h3 { text-align: center; color: var(--primary-color); font-family: var(--font-title); font-size: 1.8rem; }
 
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; font-size: 1rem; margin-bottom: 5px; }
@@ -135,10 +119,6 @@
             margin-top: 10px;
         }
 
-        .btn-submit:hover {
-            opacity: 0.95;
-        }
-
         #successMessage {
             display: none;
             background: #E8F5E9;
@@ -149,25 +129,53 @@
             font-size: 1.1rem;
         }
 
-        /* قسم هدية الصور */
-        .gift-section {
-            margin-top: 30px;
-            padding: 20px 15px;
-            border-radius: 15px;
-            background: #FDFBF7;
-            border: 1px solid var(--accent-color);
+        /* زر ورابط اللوحة السرية */
+        .admin-trigger {
+            margin-top: 25px;
+            font-size: 0.85rem;
+            color: #888;
+            cursor: pointer;
+            text-decoration: underline;
         }
 
-        .gift-section h3 {
+        /* تصميم اللوحة السرية */
+        #adminSection {
+            display: none;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px dashed var(--accent-color);
+            text-align: right;
+        }
+
+        #adminSection h2 {
+            text-align: center;
             color: var(--primary-color);
             font-family: var(--font-title);
-            margin-top: 0;
         }
 
-        .gift-note {
-            font-size: 0.95rem;
-            color: #666;
+        .response-card {
+            background: #FDFBF7;
+            border: 1px solid var(--accent-color);
+            border-radius: 12px;
+            padding: 15px;
             margin-bottom: 15px;
+        }
+
+        .response-card img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .btn-clear {
+            background: #c62828;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -179,9 +187,7 @@
 
     <p>بكل حب وسعادة، يسعدنا دعوتكم لحضور حفل عقد قران</p>
 
-    <div class="names">
-        صهيب <span>&</span> نور الهدى
-    </div>
+    <div class="names">صهيب <span>&</span> نور الهدى</div>
 
     <div class="event-info">
         <p>📅 <strong>التاريخ:</strong> الأربعاء، 26 أغسطس 2026</p>
@@ -197,18 +203,18 @@
         <div><span id="seconds">00</span><label>ثانية</label></div>
     </div>
 
-    <!-- نموذج تأكيد الحضور المربوط بالإيميل -->
-    <form class="rsvp-form" id="rsvpForm" action="https://formspree.io/f/xgoglkkz" method="POST" enctype="multipart/form-data">
-        <h3>تأكيد الحضور</h3>
+    <!-- نموذج تأكيد الحضور والتهنئة والصور -->
+    <form class="rsvp-form" id="rsvpForm">
+        <h3>تأكيد الحضور والتهنئة</h3>
         
         <div class="form-group">
             <label for="guestName">الاسم الكريم:</label>
-            <input type="text" id="guestName" name="الاسم" required placeholder="ادخل اسمك هنا">
+            <input type="text" id="guestName" required placeholder="ادخل اسمك هنا">
         </div>
 
         <div class="form-group">
             <label for="attendance">هل ستحضر؟</label>
-            <select id="attendance" name="حالة الحضور" required>
+            <select id="attendance" required>
                 <option value="نعم، سأحضر إن شاء الله">نعم، سأحضر</option>
                 <option value="اعتذر عن الحضور">اعتذر عن الحضور</option>
                 <option value="ربما">ربما</option>
@@ -217,34 +223,40 @@
 
         <div class="form-group">
             <label for="plusOnes">عدد المرافقين:</label>
-            <input type="number" id="plusOnes" name="عدد المرافقين" min="0" value="0">
+            <input type="number" id="plusOnes" min="0" value="0">
         </div>
 
         <div class="form-group">
             <label for="message">تهنئة للعروسين (اختيارية):</label>
-            <textarea id="message" name="التهنئة" rows="3" placeholder="اكتب مباركتك هنا..."></textarea>
+            <textarea id="message" rows="3" placeholder="اكتب مباركتك هنا..."></textarea>
         </div>
 
-        <!-- قسم هدية الصور داخل النموذج -->
-        <div class="gift-section">
-            <h3>🎁 هدية الصور للعروسين</h3>
-            <p class="gift-note">شاركونا لقطاتكم وصوركم من الحفل! ستصل كهدية خاصة للعروسين ✨</p>
-            <div class="form-group">
-                <input type="file" name="الصورة المرفقة" accept="image/*">
-            </div>
+        <div class="form-group">
+            <label for="photo">🎁 إرفاق صورة/لقطة للعروسين (اختياري):</label>
+            <input type="file" id="photo" accept="image/*">
         </div>
 
-        <button type="submit" class="btn-submit">
-            ✨ إرسال التأكيد
-        </button>
+        <button type="submit" class="btn-submit">✨ إرسال التأكيد</button>
     </form>
 
     <div id="successMessage">
-        🎉 شكرًا لك! تم إرسال ردك بنجاح.
+        🎉 شكرًا لك! تم حفظ ردك بنجاح.
+    </div>
+
+    <!-- رابط دخول اللوحة السرية -->
+    <div class="admin-trigger" onclick="openAdminPanel()">🔒 دخول لوحة العروسين السرية</div>
+
+    <!-- اللوحة السرية -->
+    <div id="adminSection">
+        <h2>👑 لوحة التحكم بالردود</h2>
+        <div id="adminContent"></div>
+        <button class="btn-clear" onclick="clearData()">🗑️ مسح كافة الردود</button>
     </div>
 </div>
 
 <script>
+    const SECRET_KEY = "1234sS"; // كلمة السر الخاصة بكما
+
     // العداد التنازلي
     const weddingDate = new Date("Aug 26, 2026 19:00:00").getTime();
     setInterval(function() {
@@ -261,25 +273,93 @@
         }
     }, 1000);
 
-    // معالجة الإرسال دون مغادرة الصفحة
+    // معالجة حفظ البيانات في الذاكرة المحلية
     const form = document.getElementById("rsvpForm");
-    form.addEventListener("submit", async function(event) {
-        event.preventDefault();
-        const formData = new FormData(form);
-        const response = await fetch(form.action, {
-            method: form.method,
-            body: formData,
-            headers: { 'Accept': 'application/json' }
-        });
+    form.addEventListener("submit", function(e) {
+        e.preventDefault();
 
-        if (response.ok) {
+        const name = document.getElementById("guestName").value;
+        const attendance = document.getElementById("attendance").value;
+        const plusOnes = document.getElementById("plusOnes").value;
+        const message = document.getElementById("message").value;
+        const photoInput = document.getElementById("photo");
+
+        const saveData = (photoBase64) => {
+            const newResponse = {
+                id: Date.now(),
+                name: name,
+                attendance: attendance,
+                plusOnes: plusOnes,
+                message: message,
+                photo: photoBase64 || null,
+                date: new Date().toLocaleString("ar-EG")
+            };
+
+            let currentResponses = JSON.parse(localStorage.getItem("wedding_rsvps") || "[]");
+            currentResponses.push(newResponse);
+            localStorage.setItem("wedding_rsvps", JSON.stringify(currentResponses));
+
             form.style.display = "none";
             document.getElementById("successMessage").style.display = "block";
+        };
+
+        if (photoInput.files && photoInput.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                saveData(e.target.result);
+            };
+            reader.readAsDataURL(photoInput.files[0]);
         } else {
-            alert("حدث خطأ بسيط أثناء الإرسال، يرجى إعادة المحاولة.");
+            saveData(null);
         }
     });
+
+    // فتح اللوحة السرية عند كتابة كلمة السر
+    function openAdminPanel() {
+        const inputPass = prompt("أدخل كلمة السر الخاصة باللوحة السرية:");
+        if (inputPass === SECRET_KEY) {
+            document.getElementById("adminSection").style.display = "block";
+            loadAdminData();
+        } else if (inputPass !== null) {
+            alert("كلمة السر غير صحيحة!");
+        }
+    }
+
+    // عرض الردود والصور داخل اللوحة
+    function loadAdminData() {
+        const responses = JSON.parse(localStorage.getItem("wedding_rsvps") || "[]");
+        const container = document.getElementById("adminContent");
+
+        if (responses.length === 0) {
+            container.innerHTML = "<p style='text-align:center; color:#777;'>لا توجد ردود مسجلة حتى الآن.</p>";
+            return;
+        }
+
+        let html = `<p style='font-weight:bold;'>إجمالي الردود: ${responses.length}</p>`;
+        responses.reverse().forEach(res => {
+            html += `
+                <div class="response-card">
+                    <p>👤 <strong>الاسم:</strong> ${res.name}</p>
+                    <p>📌 <strong>الحالة:</strong> ${res.attendance}</p>
+                    <p>👥 <strong>المرافقين:</strong> ${res.plusOnes}</p>
+                    ${res.message ? `<p>💬 <strong>التهنئة:</strong> ${res.message}</p>` : ''}
+                    ${res.photo ? `<p>📸 <strong>الصورة المرفقة:</strong></p><img src="${res.photo}" alt="صورة مرفقة">` : ''}
+                    <p style="font-size:0.75rem; color:#888; margin-top:5px;">🕒 ${res.date}</p>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    // مسح كافة الردود
+    function clearData() {
+        if (confirm("هل أنت تأكد من رغبتك في مسح جميع الردود؟")) {
+            localStorage.removeItem("wedding_rsvps");
+            loadAdminData();
+        }
+    }
 </script>
 
 </body>
-</html>
+    </html>
+    
