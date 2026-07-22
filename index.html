@@ -3,55 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>دعوة عقد قران - صهيب & نور الهدى</title>
+    <title>دعوة عقد قران صهيب & نور الهدى</title>
+    <!-- استيراد خطوط جوجل الفاخرة -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Aref+Ruqaa&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #FFFFFF;
-            --primary-color: #556B2F; /* زيتوني */
-            --text-color: #2C3E50;
-            --accent-color: #8FBC8F;
+            --bg-color: #FDFDFD;
+            --primary-color: #556B2F; /* زيتوني فاخر */
+            --accent-color: #D4AF37; /* ذهبي */
+            --text-color: #333;
+            --font-main: 'Amiri', serif;
+            --font-title: 'Aref Ruqaa', serif;
         }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: var(--font-main);
             background-color: var(--bg-color);
             color: var(--text-color);
-            text-align: center;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            /* خلفية زخرفة خفيفة */
+            background-image: url('https://www.transparenttextures.com/patterns/az-subtle.png');
         }
         .container {
-            max-width: 500px;
-            margin: 0 auto;
-            border: 2px solid var(--primary-color);
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(85, 107, 47, 0.15);
+            width: 90%;
+            max-width: 480px;
+            background: #fff;
+            padding: 40px 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 2px solid #EEE8AA; /* حدود ذهبية خفيفة */
+            margin: 20px 0;
         }
-        h1, h2 {
+        h1 {
+            font-family: var(--font-title);
+            color: var(--primary-color);
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+        }
+        .bismillah {
+            font-size: 1.1rem;
+            color: #888;
+            margin-bottom: 25px;
+        }
+        .names {
+            font-family: var(--font-title);
+            font-size: 2.8rem;
+            color: var(--primary-color);
+            margin: 20px 0;
+            position: relative;
+        }
+        .heart {
+            color: red;
+            font-size: 1.5rem;
+        }
+        .details p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #555;
+            margin: 10px 0;
+        }
+        .details strong {
             color: var(--primary-color);
         }
-        .btn {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            font-size: 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 15px;
-            width: 100%;
+        /* العداد التنازلي */
+        #countdown {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            padding: 15px;
+            background: #F4F6F0;
+            border-radius: 10px;
+        }
+        #countdown div {
+            flex: 1;
+        }
+        #countdown span {
+            display: block;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+        #countdown label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        hr {
+            border: 0;
+            border-top: 1px solid #EEE;
+            margin: 30px 0;
+        }
+        /* تصميم النموذج الفخم */
+        .rsvp {
+            text-align: right;
+            padding: 0 10px;
+        }
+        .rsvp h3 {
+            text-align: center;
+            color: var(--primary-color);
+            font-family: var(--font-title);
+            font-size: 1.6rem;
         }
         .form-group {
-            margin: 15px 0;
-            text-align: right;
+            margin-bottom: 15px;
         }
-        input, select, textarea {
+        .form-group label {
+            display: block;
+            font-size: 1rem;
+            color: var(--text-color);
+            margin-bottom: 5px;
+        }
+        input[type="text"], input[type="number"], select, textarea {
             width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            padding: 12px;
+            border: 1px solid #DDD;
+            border-radius: 8px;
             box-sizing: border-box;
+            font-family: var(--font-main);
+            font-size: 1rem;
+        }
+        textarea { resize: vertical; }
+        /* زر ذهبي فخم */
+        .btn-gold {
+            background: linear-gradient(145deg, #D4AF37, #C5A028);
+            color: #fff;
+            border: none;
+            padding: 15px;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            font-family: var(--font-title);
+            box-shadow: 0 4px 10px rgba(212, 175, 55, 0.4);
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+        .btn-gold:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 5px rgba(212, 175, 55, 0.4);
         }
     </style>
 </head>
@@ -59,43 +152,109 @@
 
 <div class="container">
     <h1>💍 دعوة عقد قران</h1>
-    <p><strong>بسم الله الرحمن الرحيم</strong></p>
-    <p>بكل حب وسعادة، يسعدنا دعوتكم لحضور حفل عقد قران</p>
-    <h2>صهيب & نور الهدى</h2>
-    <p>نتشرف بحضوركم ومشاركتكم فرحتنا في هذا اليوم المبارك.</p>
+    <p class="bismillah"><strong>بسم الله الرحمن الرحيم</strong></p>
     
-    <hr style="border-color: var(--primary-color); opacity: 0.3;">
+    <div class="details">
+        <p>بكل حب وسعادة، يسعدنا دعوتكم لحضور حفل عقد قران</p>
+    </div>
 
-    <p>📅 <strong>التاريخ:</strong> 26 / 08 / 2026</p>
-    <p>🕒 <strong>الوقت:</strong> يُحدد لاحقاً</p>
-    <p>📍 <strong>المكان:</strong> شوراو</p>
+    <div class="names">
+        صهيب <span class="heart">❤</span> نور الهدى
+    </div>
 
-    <form id="rsvpForm">
+    <div class="details">
+        <p>نتشرف بحضوركم ومشاركتكم فرحتنا في هذا اليوم المبارك.</p>
+        
+        <hr>
+        
+        <p>📅 <strong>التاريخ:</strong> الأربعاء، 26 / 08 / 2026</p>
+        <p>🕒 <strong>الوقت:</strong> يُحدد لاحقاً</p>
+        <p>📍 <strong>المكان:</strong> شوراو</p>
+    </div>
+
+    <!-- عداد تنازلي -->
+    <div id="countdown">
+        <div><span id="days">00</span><label>يوم</label></div>
+        <div><span id="hours">00</span><label>ساعة</label></div>
+        <div><span id="minutes">00</span><label>دقيقة</label></div>
+        <div><span id="seconds">00</span><label>ثانية</label></div>
+    </div>
+
+    <hr>
+
+    <form class="rsvp" id="rsvpForm">
         <h3>تأكيد الحضور</h3>
         <div class="form-group">
             <label>الاسم الكريم:</label>
-            <input type="text" required placeholder="اكتب اسمك هنا">
+            <input type="text" id="guestName" required placeholder="مثال: صهيب عبد الرحمن">
         </div>
         <div class="form-group">
             <label>هل ستحضر؟</label>
-            <select required>
-                <option value="yes">نعم</option>
-                <option value="no">لا</option>
+            <select id="willAttend" required>
+                <option value="" disabled selected>اختر الإجابة</option>
+                <option value="yes">نعم، سأحضر</option>
+                <option value="no">لا، لن أتمكن من الحضور</option>
                 <option value="maybe">ربما</option>
             </select>
         </div>
         <div class="form-group">
-            <label>عدد المرافقين:</label>
-            <input type="number" min="0" value="0">
+            <label>عدد المرافقين (+):</label>
+            <input type="number" id="plusOnes" min="0" value="0">
         </div>
         <div class="form-group">
             <label>كلمة تهنئة (اختيارية):</label>
-            <textarea rows="3"></textarea>
+            <textarea id="congratulations" rows="3" placeholder="تمنياتنا للعروسين..."></textarea>
         </div>
-        <button type="button" class="btn" onclick="alert('شكرًا لتأكيد حضوركم، نتطلع لمشاركتكم فرحتنا. 💐')">تأكيد الحضور</button>
+        <button type="button" class="btn-gold" onclick="confirmRSVP()">تأكيد الحضور</button>
     </form>
 </div>
 
+<script>
+    // برمجة العداد التنازلي
+    const countDownDate = new Date("Aug 26, 2026 19:00:00").getTime();
+
+    const x = setInterval(function() {
+        const now = new Date().getTime();
+        const distance = countDownDate - now;
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById("days").innerHTML = String(days).padStart(2, '0');
+        document.getElementById("hours").innerHTML = String(hours).padStart(2, '0');
+        document.getElementById("minutes").innerHTML = String(minutes).padStart(2, '0');
+        document.getElementById("seconds").innerHTML = String(seconds).padStart(2, '0');
+
+        if (distance < 0) {
+            clearInterval(x);
+            document.getElementById("countdown").innerHTML = "تم عقد القران بنجاح!";
+        }
+    }, 1000);
+
+    // دالة تأكيد الحضور (RSVP)
+    function confirmRSVP() {
+        const guestName = document.getElementById('guestName').value;
+        const willAttend = document.getElementById('willAttend').value;
+        const plusOnes = document.getElementById('plusOnes').value;
+        
+        if(guestName && willAttend) {
+            let message = `شكرًا لتأكيد حضوركم، `;
+            if(willAttend === 'no') {
+                message = "سنفتقدكم! ";
+            } else if (willAttend === 'maybe') {
+                message = "نأمل أن تتمكنوا من الانضمام إلينا! ";
+            } else {
+                message = `نتطلع لمشاركتكم فرحتنا! `;
+            }
+            alert(`${message} شكرًا لك، ${guestName}. 💐\nعدد المرافقين: ${plusOnes}`);
+        } else {
+            alert("يرجى إكمال الحقول المطلوبة (الاسم الكريم وحالة الحضور).");
+        }
+    }
+</script>
+
 </body>
-                           </html>
-                           
+        </html>
+        
