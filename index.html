@@ -121,8 +121,8 @@
             font-size: 1rem;
         }
 
-        .btn-whatsapp {
-            background: linear-gradient(135deg, #25D366, #128C7E);
+        .btn-submit {
+            background: linear-gradient(135deg, var(--primary-color), #2F3B16);
             color: white;
             border: none;
             padding: 14px;
@@ -131,11 +131,25 @@
             cursor: pointer;
             width: 100%;
             font-family: var(--font-title);
-            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+            box-shadow: 0 4px 12px rgba(74, 93, 35, 0.3);
             margin-top: 10px;
         }
 
-        /* قسم الصور للمعازيم */
+        .btn-submit:hover {
+            opacity: 0.95;
+        }
+
+        #successMessage {
+            display: none;
+            background: #E8F5E9;
+            color: #2E7D32;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-size: 1.1rem;
+        }
+
+        /* قسم هدية الصور */
         .gift-section {
             margin-top: 30px;
             padding: 20px 15px;
@@ -183,48 +197,54 @@
         <div><span id="seconds">00</span><label>ثانية</label></div>
     </div>
 
-    <!-- نموذج تأكيد الحضور -->
-    <form class="rsvp-form">
+    <!-- نموذج تأكيد الحضور المربوط بالإيميل -->
+    <form class="rsvp-form" id="rsvpForm" action="https://formspree.io/f/xgoglkkz" method="POST" enctype="multipart/form-data">
         <h3>تأكيد الحضور</h3>
+        
         <div class="form-group">
-            <label>الاسم الكريم:</label>
-            <input type="text" id="guestName" required placeholder="ادخل اسمك هنا">
+            <label for="guestName">الاسم الكريم:</label>
+            <input type="text" id="guestName" name="الاسم" required placeholder="ادخل اسمك هنا">
         </div>
+
         <div class="form-group">
-            <label>هل ستحضر؟</label>
-            <select id="attendance" required>
+            <label for="attendance">هل ستحضر؟</label>
+            <select id="attendance" name="حالة الحضور" required>
                 <option value="نعم، سأحضر إن شاء الله">نعم، سأحضر</option>
                 <option value="اعتذر عن الحضور">اعتذر عن الحضور</option>
                 <option value="ربما">ربما</option>
             </select>
         </div>
+
         <div class="form-group">
-            <label>عدد المرافقين:</label>
-            <input type="number" id="plusOnes" min="0" value="0">
+            <label for="plusOnes">عدد المرافقين:</label>
+            <input type="number" id="plusOnes" name="عدد المرافقين" min="0" value="0">
         </div>
+
         <div class="form-group">
-            <label>تهنئة للعروسين (اختيارية):</label>
-            <textarea id="message" rows="3"></textarea>
+            <label for="message">تهنئة للعروسين (اختيارية):</label>
+            <textarea id="message" name="التهنئة" rows="3" placeholder="اكتب مباركتك هنا..."></textarea>
         </div>
-        <button type="button" class="btn-whatsapp" onclick="sendToWhatsApp()">
-            📲 تأكيد الحضور عبر الواتساب
+
+        <!-- قسم هدية الصور داخل النموذج -->
+        <div class="gift-section">
+            <h3>🎁 هدية الصور للعروسين</h3>
+            <p class="gift-note">شاركونا لقطاتكم وصوركم من الحفل! ستصل كهدية خاصة للعروسين ✨</p>
+            <div class="form-group">
+                <input type="file" name="الصورة المرفقة" accept="image/*">
+            </div>
+        </div>
+
+        <button type="submit" class="btn-submit">
+            ✨ إرسال التأكيد
         </button>
     </form>
 
-    <!-- قسم هدية الصور للمعازيم -->
-    <div class="gift-section">
-        <h3>🎁 هدية الصور للعروسين</h3>
-        <p class="gift-note">شاركونا لقطاتكم الجميلة من الحفل! الصور التي سترسلونها ستُقفل وتصل كهدية مفاجأة تفتح للعروسين بعد 24 ساعة من الحفل ✨</p>
-        <button type="button" class="btn-whatsapp" style="background: linear-gradient(135deg, #D4AF37, #B8860B);" onclick="sendPhotosViaWhatsApp()">
-            📸 إرسال صورك كهدية للعروسين
-        </button>
+    <div id="successMessage">
+        🎉 شكرًا لك! تم إرسال ردك بنجاح.
     </div>
 </div>
 
 <script>
-    // رقم الواتساب المعتمد
-    const myPhoneNumber = "9647712296920"; 
-
     // العداد التنازلي
     const weddingDate = new Date("Aug 26, 2026 19:00:00").getTime();
     setInterval(function() {
@@ -241,34 +261,25 @@
         }
     }, 1000);
 
-    // إرسال تأكيد الحضور
-    function sendToWhatsApp() {
-        const name = document.getElementById('guestName').value;
-        const attendance = document.getElementById('attendance').value;
-        const plusOnes = document.getElementById('plusOnes').value;
-        const msg = document.getElementById('message').value;
+    // معالجة الإرسال دون مغادرة الصفحة
+    const form = document.getElementById("rsvpForm");
+    form.addEventListener("submit", async function(event) {
+        event.preventDefault();
+        const formData = new FormData(form);
+        const response = await fetch(form.action, {
+            method: form.method,
+            body: formData,
+            headers: { 'Accept': 'application/json' }
+        });
 
-        if (!name) {
-            alert('يرجى كتابة الاسم الكريم أولاً.');
-            return;
+        if (response.ok) {
+            form.style.display = "none";
+            document.getElementById("successMessage").style.display = "block";
+        } else {
+            alert("حدث خطأ بسيط أثناء الإرسال، يرجى إعادة المحاولة.");
         }
-
-        let text = `مرحباً، تأكيد حضور حفل عقد قران (صهيب & نور الهدى)%0A%0A`;
-        text += `👤 *الاسم:* ${name}%0A`;
-        text += `✨ *الحالة:* ${attendance}%0A`;
-        text += `👥 *عدد المرافقين:* ${plusOnes}%0A`;
-        if (msg) text += `💬 *التهنئة:* ${msg}%0A`;
-
-        window.open(`https://wa.me/${myPhoneNumber}?text=${text}`, '_blank');
-    }
-
-    // إرسال الصور للعروسين
-    function sendPhotosViaWhatsApp() {
-        let text = `مرحباً صهيب، هديتي لكم هي هذه اللقطات الجميلة من الحفل! 📸🎁 (تفتح بعد 24 ساعة من عقد القران ✨)`;
-        window.open(`https://wa.me/${myPhoneNumber}?text=${text}`, '_blank');
-    }
+    });
 </script>
 
 </body>
-            </html>
-            
+</html>
