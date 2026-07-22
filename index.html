@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دعوة عقد قران - صهيب & نور الهدى</title>
+    <style>
+        :root {
+            --bg-color: #FFFFFF;
+            --primary-color: #556B2F; /* زيتوني */
+            --text-color: #2C3E50;
+            --accent-color: #8FBC8F;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            border: 2px solid var(--primary-color);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(85, 107, 47, 0.15);
+        }
+        h1, h2 {
+            color: var(--primary-color);
+        }
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 15px;
+            width: 100%;
+        }
+        .form-group {
+            margin: 15px 0;
+            text-align: right;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>💍 دعوة عقد قران</h1>
+    <p><strong>بسم الله الرحمن الرحيم</strong></p>
+    <p>بكل حب وسعادة، يسعدنا دعوتكم لحضور حفل عقد قران</p>
+    <h2>صهيب & نور الهدى</h2>
+    <p>نتشرف بحضوركم ومشاركتكم فرحتنا في هذا اليوم المبارك.</p>
+    
+    <hr style="border-color: var(--primary-color); opacity: 0.3;">
+
+    <p>📅 <strong>التاريخ:</strong> 26 / 08 / 2026</p>
+    <p>🕒 <strong>الوقت:</strong> يُحدد لاحقاً</p>
+    <p>📍 <strong>المكان:</strong> شوراو</p>
+
+    <form id="rsvpForm">
+        <h3>تأكيد الحضور</h3>
+        <div class="form-group">
+            <label>الاسم الكريم:</label>
+            <input type="text" required placeholder="اكتب اسمك هنا">
+        </div>
+        <div class="form-group">
+            <label>هل ستحضر؟</label>
+            <select required>
+                <option value="yes">نعم</option>
+                <option value="no">لا</option>
+                <option value="maybe">ربما</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>عدد المرافقين:</label>
+            <input type="number" min="0" value="0">
+        </div>
+        <div class="form-group">
+            <label>كلمة تهنئة (اختيارية):</label>
+            <textarea rows="3"></textarea>
+        </div>
+        <button type="button" class="btn" onclick="alert('شكرًا لتأكيد حضوركم، نتطلع لمشاركتكم فرحتنا. 💐')">تأكيد الحضور</button>
+    </form>
+</div>
+
+</body>
+                           </html>
+                           
