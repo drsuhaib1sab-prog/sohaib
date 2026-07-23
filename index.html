@@ -9,9 +9,9 @@
         :root {
             --bg-color: #FAF9F6;
             --card-bg: #FFFFFF;
-            --primary-color: #4A5D23;
-            --accent-color: #D4AF37;
-            --text-color: #333333;
+            --primary-color: #4A5D23; /* زيتوني فاخر */
+            --accent-color: #D4AF37;  /* ذهبي شامباني */
+            --text-color: #2C3518;
             --font-main: 'Amiri', serif;
             --font-title: 'Aref Ruqaa', serif;
         }
@@ -28,8 +28,39 @@
             align-items: center;
             min-height: 100vh;
             text-align: center;
-            background-image: radial-gradient(#4A5D23 0.5px, transparent 0.5px);
-            background-size: 20px 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* حاوية التساقط */
+        .petals-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .petal {
+            position: absolute;
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.8;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-10vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(105vh) rotate(360deg);
+                opacity: 0.2;
+            }
         }
 
         .card {
@@ -38,10 +69,11 @@
             background: var(--card-bg);
             padding: 35px 20px;
             border-radius: 25px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            box-shadow: 0 15px 35px rgba(74, 93, 35, 0.12);
             border: 2px solid var(--accent-color);
             box-sizing: border-box;
             position: relative;
+            z-index: 2;
         }
 
         h1 {
@@ -193,6 +225,9 @@
 </head>
 <body>
 
+<!-- طبقة البتلات المتحركة -->
+<div class="petals-container" id="petalsContainer"></div>
+
 <audio id="weddingAudio" loop>
     <source src="song.mp3" type="audio/mpeg">
 </audio>
@@ -271,7 +306,7 @@
 <!-- مكتبات Firebase -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, getDocs, query } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDur21LDJObBiM6ws9W7DJo-PLACEHOLDER",
@@ -288,7 +323,6 @@
   const form = document.getElementById("rsvpForm");
   const submitBtn = document.getElementById("submitBtn");
 
-  // دالة لتصغير أبعاد وحجم الصورة تلقائياً
   function compressImage(file, maxWidth = 500, quality = 0.6) {
       return new Promise((resolve) => {
           const reader = new FileReader();
@@ -400,6 +434,20 @@
 </script>
 
 <script>
+    // إنشاء البتلات المتحركة تلقائياً
+    const container = document.getElementById('petalsContainer');
+    const items = ['🌿', '✨', '🍃', '🕊️'];
+    for (let i = 0; i < 22; i++) {
+        const petal = document.createElement('div');
+        petal.className = 'petal';
+        petal.innerText = items[Math.floor(Math.random() * items.length)];
+        petal.style.left = Math.random() * 100 + '%';
+        petal.style.fontSize = (Math.random() * 12 + 12) + 'px';
+        petal.style.animationDuration = (Math.random() * 5 + 6) + 's';
+        petal.style.animationDelay = (Math.random() * 5) + 's';
+        container.appendChild(petal);
+    }
+
     const SECRET_KEY = "1234sS";
 
     const audio = document.getElementById("weddingAudio");
