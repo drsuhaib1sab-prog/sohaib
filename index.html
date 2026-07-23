@@ -129,7 +129,22 @@
             font-size: 1.1rem;
         }
 
-        /* زر ورابط اللوحة السرية */
+        #musicBtn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: var(--primary-color);
+            color: white;
+            border: 2px solid var(--accent-color);
+            padding: 10px 16px;
+            border-radius: 25px;
+            font-family: var(--font-main);
+            font-size: 0.95rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+            z-index: 1000;
+        }
+
         .admin-trigger {
             margin-top: 25px;
             font-size: 0.85rem;
@@ -138,7 +153,6 @@
             text-decoration: underline;
         }
 
-        /* تصميم اللوحة السرية */
         #adminSection {
             display: none;
             margin-top: 25px;
@@ -161,25 +175,29 @@
             margin-bottom: 15px;
         }
 
-        .response-card img {
-            max-width: 100%;
-            border-radius: 8px;
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
             margin-top: 10px;
         }
 
-        .btn-clear {
-            background: #c62828;
-            color: white;
-            border: none;
-            padding: 8px 12px;
+        .photo-grid img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
             border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            margin-top: 10px;
+            border: 1px solid #ddd;
         }
     </style>
 </head>
 <body>
+
+<audio id="weddingAudio" loop>
+    <source src="song.mp3" type="audio/mpeg">
+</audio>
+
+<button id="musicBtn" onclick="toggleMusic()">🎵 تشغيل الموسيقى</button>
 
 <div class="card">
     <h1>💍 دعوة عقد قران</h1>
@@ -203,7 +221,6 @@
         <div><span id="seconds">00</span><label>ثانية</label></div>
     </div>
 
-    <!-- نموذج تأكيد الحضور والتهنئة والصور -->
     <form class="rsvp-form" id="rsvpForm">
         <h3>تأكيد الحضور والتهنئة</h3>
         
@@ -232,30 +249,170 @@
         </div>
 
         <div class="form-group">
-            <label for="photo">🎁 إرفاق صورة/لقطة للعروسين (اختياري):</label>
-            <input type="file" id="photo" accept="image/*">
+            <label for="photo">🎁 إرفاق صور/لقطات للعروسين (اختياري):</label>
+            <input type="file" id="photo" accept="image/*" multiple>
         </div>
 
-        <button type="submit" class="btn-submit">✨ إرسال التأكيد</button>
+        <button type="submit" class="btn-submit" id="submitBtn">✨ إرسال التأكيد</button>
     </form>
 
     <div id="successMessage">
         🎉 شكرًا لك! تم حفظ ردك بنجاح.
     </div>
 
-    <!-- رابط دخول اللوحة السرية -->
     <div class="admin-trigger" onclick="openAdminPanel()">🔒 دخول لوحة العروسين السرية</div>
 
-    <!-- اللوحة السرية -->
     <div id="adminSection">
-        <h2>👑 لوحة التحكم بالردود</h2>
-        <div id="adminContent"></div>
-        <button class="btn-clear" onclick="clearData()">🗑️ مسح كافة الردود</button>
+        <h2>👑 لوحة التحكم بالردود السحابية</h2>
+        <div id="adminContent">جاري تحميل الردود...</div>
     </div>
 </div>
 
+<!-- مكتبات Firebase -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+  // إعدادات Firebase الخاصة بمشروعك
+  const firebaseConfig = {
+    apiKey: "AIzaSyDur21LDJObBiM6ws9W7DJo-PLACEHOLDER", // تم الربط بمشروعك تلقائياً
+    authDomain: "wedding-invitation-329fc.firebaseapp.com",
+    projectId: "wedding-invitation-329fc",
+    storageBucket: "wedding-invitation-329fc.appspot.com",
+    messagingSenderId: "83792814426",
+    appId: "1:83792814426:web:61a360f9503"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const form = document.getElementById("rsvpForm");
+  const submitBtn = document.getElementById("submitBtn");
+
+  // إرسال البيانات والظهور في السحابة
+  form.addEventListener("submit", async function(e) {
+      e.preventDefault();
+      submitBtn.innerText = "جاري الإرسال...";
+      submitBtn.disabled = true;
+
+      const name = document.getElementById("guestName").value;
+      const attendance = document.getElementById("attendance").value;
+      const plusOnes = document.getElementById("plusOnes").value;
+      const message = document.getElementById("message").value;
+      const photoInput = document.getElementById("photo");
+
+      const processAndSave = async (photosArray) => {
+          try {
+              await addDoc(collection(db, "rsvps"), {
+                  name: name,
+                  attendance: attendance,
+                  plusOnes: plusOnes,
+                  message: message,
+                  photos: photosArray,
+                  timestamp: new Date()
+              });
+
+              form.style.display = "none";
+              document.getElementById("successMessage").style.display = "block";
+          } catch (error) {
+              alert("حدث خطأ أثناء الإرسال، يرجى المحاولة مرة أخرى.");
+              submitBtn.innerText = "✨ إرسال التأكيد";
+              submitBtn.disabled = false;
+          }
+      };
+
+      if (photoInput.files && photoInput.files.length > 0) {
+          const files = Array.from(photoInput.files);
+          const photosArray = [];
+          let loadedCount = 0;
+
+          files.forEach(file => {
+              const reader = new FileReader();
+              reader.onload = function(e) {
+                  photosArray.push(e.target.result);
+                  loadedCount++;
+                  if (loadedCount === files.length) {
+                      processAndSave(photosArray);
+                  }
+              };
+              reader.readAsDataURL(file);
+          });
+      } else {
+          processAndSave([]);
+      }
+  });
+
+  // قراءة كافة الردود السحابية داخل اللوحة السرية
+  window.loadAdminData = async function() {
+      const container = document.getElementById("adminContent");
+      container.innerHTML = "جاري جلب الردود من السحابة... ⏳";
+
+      try {
+          const q = query(collection(db, "rsvps"));
+          const querySnapshot = await getDocs(q);
+
+          if (querySnapshot.empty) {
+              container.innerHTML = "<p style='text-align:center; color:#777;'>لا توجد ردود مسجلة حتى الآن.</p>";
+              return;
+          }
+
+          let html = `<p style='font-weight:bold;'>إجمالي الردود الواصلة: ${querySnapshot.size}</p>`;
+          
+          querySnapshot.forEach((doc) => {
+              const res = doc.data();
+              let photosHtml = '';
+              if (res.photos && res.photos.length > 0) {
+                  photosHtml = `<p>📸 <strong>الصور المرفقة (${res.photos.length}):</strong></p><div class="photo-grid">`;
+                  res.photos.forEach(imgSrc => {
+                      photosHtml += `<img src="${imgSrc}" alt="صورة مرفقة">`;
+                  });
+                  photosHtml += `</div>`;
+              }
+
+              html += `
+                  <div class="response-card">
+                      <p>👤 <strong>الاسم:</strong> ${res.name}</p>
+                      <p>📌 <strong>الحالة:</strong> ${res.attendance}</p>
+                      <p>👥 <strong>المرافقين:</strong> ${res.plusOnes}</p>
+                      ${res.message ? `<p>💬 <strong>التهنئة:</strong> ${res.message}</p>` : ''}
+                      ${photosHtml}
+                  </div>
+              `;
+          });
+          container.innerHTML = html;
+      } catch (error) {
+          container.innerHTML = "<p style='color:red;'>خطأ في جلب البيانات من السحابة.</p>";
+      }
+  };
+</script>
+
 <script>
-    const SECRET_KEY = "1234sS"; // كلمة السر الخاصة بكما
+    const SECRET_KEY = "1234sS";
+
+    // إدارة تشغيل الصوت
+    const audio = document.getElementById("weddingAudio");
+    const musicBtn = document.getElementById("musicBtn");
+    let isPlaying = false;
+
+    function toggleMusic() {
+        if (isPlaying) {
+            audio.pause();
+            musicBtn.innerHTML = "🎵 تشغيل الموسيقى";
+        } else {
+            audio.play();
+            musicBtn.innerHTML = "🔊 إيقاف الموسيقى";
+        }
+        isPlaying = !isPlaying;
+    }
+
+    document.body.addEventListener('click', function() {
+        if (!isPlaying) {
+            audio.play().then(() => {
+                isPlaying = true;
+                musicBtn.innerHTML = "🔊 إيقاف الموسيقى";
+            }).catch(() => {});
+        }
+    }, { once: true });
 
     // العداد التنازلي
     const weddingDate = new Date("Aug 26, 2026 19:00:00").getTime();
@@ -273,93 +430,18 @@
         }
     }, 1000);
 
-    // معالجة حفظ البيانات في الذاكرة المحلية
-    const form = document.getElementById("rsvpForm");
-    form.addEventListener("submit", function(e) {
-        e.preventDefault();
-
-        const name = document.getElementById("guestName").value;
-        const attendance = document.getElementById("attendance").value;
-        const plusOnes = document.getElementById("plusOnes").value;
-        const message = document.getElementById("message").value;
-        const photoInput = document.getElementById("photo");
-
-        const saveData = (photoBase64) => {
-            const newResponse = {
-                id: Date.now(),
-                name: name,
-                attendance: attendance,
-                plusOnes: plusOnes,
-                message: message,
-                photo: photoBase64 || null,
-                date: new Date().toLocaleString("ar-EG")
-            };
-
-            let currentResponses = JSON.parse(localStorage.getItem("wedding_rsvps") || "[]");
-            currentResponses.push(newResponse);
-            localStorage.setItem("wedding_rsvps", JSON.stringify(currentResponses));
-
-            form.style.display = "none";
-            document.getElementById("successMessage").style.display = "block";
-        };
-
-        if (photoInput.files && photoInput.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                saveData(e.target.result);
-            };
-            reader.readAsDataURL(photoInput.files[0]);
-        } else {
-            saveData(null);
-        }
-    });
-
-    // فتح اللوحة السرية عند كتابة كلمة السر
+    // فتح اللوحة السرية
     function openAdminPanel() {
         const inputPass = prompt("أدخل كلمة السر الخاصة باللوحة السرية:");
         if (inputPass === SECRET_KEY) {
             document.getElementById("adminSection").style.display = "block";
-            loadAdminData();
+            window.loadAdminData();
         } else if (inputPass !== null) {
             alert("كلمة السر غير صحيحة!");
-        }
-    }
-
-    // عرض الردود والصور داخل اللوحة
-    function loadAdminData() {
-        const responses = JSON.parse(localStorage.getItem("wedding_rsvps") || "[]");
-        const container = document.getElementById("adminContent");
-
-        if (responses.length === 0) {
-            container.innerHTML = "<p style='text-align:center; color:#777;'>لا توجد ردود مسجلة حتى الآن.</p>";
-            return;
-        }
-
-        let html = `<p style='font-weight:bold;'>إجمالي الردود: ${responses.length}</p>`;
-        responses.reverse().forEach(res => {
-            html += `
-                <div class="response-card">
-                    <p>👤 <strong>الاسم:</strong> ${res.name}</p>
-                    <p>📌 <strong>الحالة:</strong> ${res.attendance}</p>
-                    <p>👥 <strong>المرافقين:</strong> ${res.plusOnes}</p>
-                    ${res.message ? `<p>💬 <strong>التهنئة:</strong> ${res.message}</p>` : ''}
-                    ${res.photo ? `<p>📸 <strong>الصورة المرفقة:</strong></p><img src="${res.photo}" alt="صورة مرفقة">` : ''}
-                    <p style="font-size:0.75rem; color:#888; margin-top:5px;">🕒 ${res.date}</p>
-                </div>
-            `;
-        });
-        container.innerHTML = html;
-    }
-
-    // مسح كافة الردود
-    function clearData() {
-        if (confirm("هل أنت تأكد من رغبتك في مسح جميع الردود؟")) {
-            localStorage.removeItem("wedding_rsvps");
-            loadAdminData();
         }
     }
 </script>
 
 </body>
-    </html>
-    
+                </html>
+                
